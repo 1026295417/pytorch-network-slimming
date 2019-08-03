@@ -14,7 +14,7 @@ BN layers are automatically identified by 1) parse the traced graph by [TorchScr
                                      | --> relu --> ... --> conv/linear
                                              |
                                              | --> ... --> maxpool --> ... --> conv/linear
-Note that without coding for patches, such as [channel_selection](https://github.com/Eric-mingjie/network-slimming/blob/master/models/channel_selection.py), the prunable BNs may be less than the [official implementation](https://github.com/Eric-mingjie/network-slimming). For more details please refer to source code. 
+Note that without coding for patches, such as [channel_selection](https://github.com/Eric-mingjie/network-slimming/blob/master/models/channel_selection.py), the prunable BNs for some network architectures (ResNet/DenseNet/...) will be less than the [official implementation](https://github.com/Eric-mingjie/network-slimming). For more details please refer to source code. 
 
 It is supposed to support user defined models with Convolution(groups=1)/Linear and BN layers. The package is tested with the [CIFAR-100](https://www.cs.toronto.edu/~kriz/cifar.html) examples in this repo, and an in-house [Conv3d](https://pytorch.org/docs/stable/nn.html#conv3d) based model for video classification. 
 
