@@ -20,11 +20,9 @@ It is supposed to support user defined models with Convolution(groups=1)/Linear 
 
 ## Requirements
 
-Python >= 3.6 
-
-torch >= 1.0.0 
-
-torchvision >= 0.3.0 
+Python >= 3.6  
+torch >= 1.0.0  
+torchvision >= 0.3.0  
 
 ## Usage
 
@@ -82,20 +80,26 @@ torchvision >= 0.3.0
 ### ResNet-18
 
    ```shell
-./experiment-resnet.sh
+sh experiment-resnet.sh
    ```
 
 ### VGG-11
 
    ```shell
-./experiment-vgg11.sh
-./experiment-vgg11s.sh % simplified VGG-11 by replacing classifier with a Linear
+sh experiment-vgg11.sh
+sh experiment-vgg11s.sh % simplified VGG-11 by replacing classifier with a Linear
    ```
 
 ### DenseNet-121
 
    ```shell
-./experiment-densenet.sh
+sh experiment-densenet.sh
+   ```
+
+### Load & pruned model (ResNet-18 example)
+
+   ```shell
+python test.py --arch resnet18 --resume_path output-resnet18-bn-pr05/ckpt_best.pth
    ```
 
 <font size=2> ***-all-bn*** refers to L1 sparsity on all BN layers </font>
