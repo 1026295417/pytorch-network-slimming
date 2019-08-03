@@ -40,7 +40,7 @@ def liu2017(weights, prune_ratio, prec_layers, succ_layers, per_layer_normalizat
     # find all scale weights in BN layers
     scale_weights = []
     norm_layer_names = list(set(succ_layers) & set(prec_layers))
-    for norm_layer_name in succ_layers:
+    for norm_layer_name in norm_layer_names:
         norm_weight_name = norm_layer_name + WEIGHT_POSTFIX
         weight = weights[norm_weight_name]
         if per_layer_normalization:
