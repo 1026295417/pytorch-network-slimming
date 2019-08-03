@@ -18,6 +18,8 @@ Note that without coding for patches, such as [channel_selection](https://github
 
 It is supposed to support user defined models with Convolution(groups=1)/Linear and BN layers. The package is tested with the [CIFAR-100](https://www.cs.toronto.edu/~kriz/cifar.html) examples in this repo, and an in-house [Conv3d](https://pytorch.org/docs/stable/nn.html#conv3d) based model for video classification. 
 
+<font size=2> \* ***DataParalell*** is not supported </font>
+
 ## Requirements
 
 Python >= 3.6  
@@ -136,9 +138,9 @@ python test.py --arch resnet18 --resume_path output-resnet18-bn-pr05/ckpt_best.p
 | simplified VGG-11         |          |          |        |        |        |
 | DenseNet-63               |          |          |        |        |        |
 
-<font size=2>\* **TFS**: Train-from-scratch as proposed in Liu's later paper on ICLR 2019 [**Rethinking the Value of Network Pruning**](https://openreview.net/forum?id=rJlnB3C5Ym). </font>
-
 <font size=2> \* **PR**: Prune Ratio </font>
+
+<font size=2>\* **TFS**: Train-from-scratch as proposed in Liu's later paper on ICLR 2019 [**Rethinking the Value of Network Pruning**](https://openreview.net/forum?id=rJlnB3C5Ym). </font>
 
 ## Acknowledgement
 
