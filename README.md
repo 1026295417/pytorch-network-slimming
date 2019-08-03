@@ -20,9 +20,11 @@ It is supposed to support user defined models with Convolution(groups=1)/Linear 
 
 ## Requirements
 
-Python >= 3.6
-torch >= 1.0.0
-torchvision >= 0.3.0
+Python >= 3.6 
+
+torch >= 1.0.0 
+
+torchvision >= 0.3.0 
 
 ## Usage
 
