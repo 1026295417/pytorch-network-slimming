@@ -72,7 +72,7 @@ torchvision >= 0.3.0
    from netslim import update_bn
    ```
    
-2. Insert the following code between loss.backward() and optimizer.step(). The following is an example:
+2. Insert *updat_bn* between *loss.backward()* and *optimizer.step()*. The following is an example:
 
    *before*
 
