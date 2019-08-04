@@ -23,7 +23,7 @@ python train.py --arch densenet63 \
                 --weight-decay 2e-3 \
                 --outf output-densenet63-bn-pr05
 
-# prune 50% channels
+# prune 70% channels
 python train.py --arch densenet63 \
                 --prune-ratio 0.7 \
                 --resume-path output-densenet63-bn-sparsity/ckpt_best.pth \
