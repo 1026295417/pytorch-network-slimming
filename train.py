@@ -56,6 +56,8 @@ parser.add_argument('--log-interval', type=int, default=10, metavar='LOG-T',
                     help='how many batches to wait before logging training status')
 parser.add_argument('--outf', default='output-cifar-100', metavar='OUTNAME', 
                     help='folder to output images and model checkpoints')
+parser.add_argument('--tfs', action='store_true', default=False,
+                    help='train from scratch')
 parser.add_argument('--experimental', action='store_true', default=False,
                     help='Normalize scaling factor per layer for pruning')
 args = parser.parse_args()
@@ -106,6 +108,25 @@ if args.prune_ratio > 0 and args.resume_path:
         model = prune(model, (3, 32, 32), args.prune_ratio, prune_method=liu2017_normalized_by_layer)
     else:
         model = prune(model, (3, 32, 32), args.prune_ratio)
+    if args.tfs:
+        for m in model.modules():
+            if isinstance(m, nn.Conv2d):
+                if args.arch == "densenet63":
+                    nn.init.kaiming_normal_(m.weight)  # weird??
+                else:
+                    nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+            elif isinstance(m, nn.Linear):
+                m.reset_parameters()
+                if args.arch == "densenet63":
+                    m.reset_parameters()
+                    nn.init.constant_(m.bias, 0)
+                elif args.arch in ["vgg11", "vgg11s"]:
+                    nn.init.normal_(m.weight, 0, 0.01)
+                    nn.init.constant_(m.bias, 0)             
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+        print("Train pruned model from scratch ...")
         
 lsm = nn.LogSoftmax(dim=1)
 criterion = nn.NLLLoss()
@@ -172,4 +193,3 @@ for epoch in range(args.epochs):
         max_accuracy = accuracy
         torch.save(model.state_dict(), '{}/ckpt_best.pth'.format(args.outf))
     torch.save(model.state_dict(), '{}/ckpt_last.pth'.format(args.outf))
-    
