@@ -23,7 +23,7 @@ python train.py --arch vgg11 \
                 --weight-decay 3e-2 \
                 --outf output-vgg11-bn-pr05
 
-# prune 50% channels
+# prune 70% channels
 python train.py --arch vgg11 \
                 --prune-ratio 0.7 \
                 --resume-path output-vgg11-bn-sparsity/ckpt_best.pth \
