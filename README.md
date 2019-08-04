@@ -20,6 +20,44 @@ It is supposed to support user defined models with Convolution(groups=1)/Linear 
 
 <font size=2> \* ***DataParalell*** is not supported </font>
 
+## Results on CIFAR-100
+
+### Params (M)
+
+|                           | Original | PR=0.3 | PR=0.5 | PR=0.7 |
+| :------------------------ | :------: | :----: | :----: | :----: |
+| ResNet-18                 |  10.70   |  7.91  |  6.44  |  4.56  |
+| ResNet-18 (L1 on all BNs) |  10.70   |  7.84  |  6.39  |  4.52  |
+| VGG-11                    |  27.20   | 21.75  | 19.35  | 18.00  |
+| simplified VGG-11         |   8.85   |  4.63  |  2.09  |  0.54  |
+| DenseNet-63               |   2.19   |  1.63  |  1.32  |  0.93  |
+
+### GFLOPS
+
+|                           | Original | PR=0.3 | PR=0.5 | PR=0.7 |
+| :------------------------ | :------: | :----: | :----: | :----: |
+| ResNet-18                 |   0.52   |  0.32  |  0.21  |  0.12  |
+| ResNet-18 (L1 on all BNs) |   0.52   |  0.33  |  0.22  |  0.12  |
+| VGG-11                    |   0.19   |  0.14  |  0.09  |  0.06  |
+| simplified VGG-11         |   0.16   |  0.06  |  0.03  |  0.01  |
+| DenseNet-63               |   0.30   |  0.18  |  0.12  |  0.07  |
+
+### Accuracy (%)
+
+|                           | Original | L1 on BN | PR=0.3 | PR=0.5 | PR=0.7 |
+| :------------------------ | :------: | :------: | :----: | :----: | :----: |
+| ResNet-18                 |  78.90   |  78.21   | 78.60  | 78.02  | 74.97  |
+| ResNet-18 (L1 on all BNs) |  78.90   |  78.51   | 79.07  | 77.58  | 75.30  |
+| VGG-11                    |  71.04   |  70.66   | 71.69  | 69.16  | 58.95  |
+| simplified VGG-11         |  71.72   |  71.62   | 71.55  | 68.80  |   -    |
+| DenseNet-63               |  78.34   |  78.06   | 78.11  | 77.76  | 76.33  |
+
+<font size=2> \* Prune Ratio = 0.7 for simplified VGG-11 is failed to converge </font>
+
+<font size=2> \* **PR**: Prune Ratio </font>
+
+<font size=2>\* **TFS**: Train-from-scratch as proposed in Liu's later paper on ICLR 2019 [**Rethinking the Value of Network Pruning**](https://openreview.net/forum?id=rJlnB3C5Ym). </font>
+
 ## Requirements
 
 Python >= 3.6  
@@ -105,42 +143,6 @@ python test.py --arch resnet18 --resume_path output-resnet18-bn-pr05/ckpt_best.p
    ```
 
 <font size=2> ***-all-bn*** refers to L1 sparsity on all BN layers </font>
-
-## Results on CIFAR-100
-
-### Params (M)
-
-|                           | Original | PR=0.3 | PR=0.5 | PR=0.7 |
-| :------------------------ | :------: | :----: | :----: | :----: |
-| ResNet-18                 |          |        |        |        |
-| ResNet-18 (L1 on all BNs) |          |        |        |        |
-| VGG-11                    |          |        |        |        |
-| simplified VGG-11         |          |        |        |        |
-| DenseNet-63               |          |        |        |        |
-
-### GFLOPS
-
-|                           | Original | PR=0.3 | PR=0.5 | PR=0.7 |
-| :------------------------ | :------: | :----: | :----: | :----: |
-| ResNet-18                 |          |        |        |        |
-| ResNet-18 (L1 on all BNs) |          |        |        |        |
-| VGG-11                    |          |        |        |        |
-| simplified VGG-11         |          |        |        |        |
-| DenseNet-63               |          |        |        |        |
-
-### Accuracy (%)
-
-|                           | Original | L1 on BN | PR=0.3 | PR=0.5 | PR=0.7 |
-| :------------------------ | :------: | :------: | :----: | :----: | :----: |
-| ResNet-18                 |          |          |        |        |        |
-| ResNet-18 (L1 on all BNs) |          |          |        |        |        |
-| VGG-11                    |          |          |        |        |        |
-| simplified VGG-11         |          |          |        |        |        |
-| DenseNet-63               |          |          |        |        |        |
-
-<font size=2> \* **PR**: Prune Ratio </font>
-
-<font size=2>\* **TFS**: Train-from-scratch as proposed in Liu's later paper on ICLR 2019 [**Rethinking the Value of Network Pruning**](https://openreview.net/forum?id=rJlnB3C5Ym). </font>
 
 ## Acknowledgement
 
