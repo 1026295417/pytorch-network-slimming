@@ -49,10 +49,10 @@ It is supposed to support user defined models with Convolution(groups=1)/Linear 
 | ResNet-18                 |  78.90   |  78.21   | 78.60  | 78.02  | 74.97  |
 | ResNet-18 (L1 on all BNs) |  78.90   |  78.51   | 79.07  | 77.58  | 75.30  |
 | VGG-11                    |  71.04   |  70.66   | 71.69  | 69.16  | 58.95  |
-| simplified VGG-11         |  71.72   |  71.62   | 71.55  | 68.80  |   -    |
+| simplified VGG-11         |  71.72   |  71.62   | 71.55  | 68.80  |   F    |
 | DenseNet-63               |  78.34   |  78.06   | 78.11  | 77.76  | 76.33  |
 
-<font size=2> \* Prune Ratio = 0.7 for simplified VGG-11 is failed to converge </font>
+<font size=2> \* ***F*** Failed to converge </font>
 
 <font size=2> \* **PR**: Prune Ratio </font>
 
@@ -136,7 +136,7 @@ sh experiment-vgg11s.sh % simplified VGG-11 by replacing classifier with a Linea
 sh experiment-densenet.sh
    ```
 
-### Load & pruned model (ResNet-18 example)
+### Load & test pruned model (ResNet-18 example)
 
    ```shell
 python test.py --arch resnet18 --resume_path output-resnet18-bn-pr05/ckpt_best.pth
