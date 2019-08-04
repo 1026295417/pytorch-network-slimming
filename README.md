@@ -52,7 +52,7 @@ It is supposed to support user defined models with Convolution(groups=1)/Linear 
 | simplified VGG-11         |  71.72   |  71.62   | 71.55  | 68.80  |   F    |
 | DenseNet-63               |  78.34   |  78.06   | 78.11  | 77.76  | 76.33  |
 
-<font size=2> \* ***F*** Failed to converge </font>
+<font size=2> \* **F** Failed to converge </font>
 
 <font size=2> \* **PR**: Prune Ratio </font>
 
