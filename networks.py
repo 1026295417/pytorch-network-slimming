@@ -28,6 +28,16 @@ def vgg11s(num_classes=100):
     return model
 
 
+def vgg11mk2(num_classes=100):
+    """Constructs a VGG-11 BN classifier model for CIFAR dataset"""
+    model = models.vgg11_bn(num_classes=num_classes)
+    model.avgpool = nn.Identity()
+    model.classifier[0] = nn.Linear(512, 4096)
+    model.classifier[2] = nn.BatchNorm1d(4096)
+    model.classifier[5] = nn.BatchNorm1d(4096)
+    return model
+
+
 def densenet63(num_classes=100):
     """Constructs a DenseNet-63 simplified model for CIFAR dataset"""
     num_init_features = 32
