@@ -103,7 +103,7 @@ def _dirty_fix(module, param_name, pruned_shape):
     pruned_dim = 0
     for original_size, pruned_size in zip(module_param.shape, pruned_shape):
         if original_size != pruned_size:
-            keep_indices = torch.LongTensor(range(pruned_size))#.to(module_param.data.device)
+            keep_indices = torch.LongTensor(range(pruned_size)).to(module_param.data.device)
             module_param.data = module_param.data.index_select(pruned_dim, keep_indices)
 
             # modify number of features/channels
