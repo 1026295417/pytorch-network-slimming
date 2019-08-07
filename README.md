@@ -18,19 +18,19 @@ Note that without coding for patches, such as [channel_selection](https://github
 
 It is supposed to support user defined models with Convolution(groups=1)/Linear and BN layers. The package is tested with the [CIFAR-100](https://www.cs.toronto.edu/~kriz/cifar.html) examples in this repo, and an in-house [Conv3d](https://pytorch.org/docs/stable/nn.html#conv3d) based model for video classification. 
 
-<font size=2> \* ***DataParalell*** is not supported </font>
+<font size=2> \* ***DataParalell*** is not supported </font>
 
 ## Results on CIFAR-100
 
 ### Accuracy (%)
 
-|                           | Original | L1 on BN | PR=0.3 | PR=0.5 | PR=0.7 |
-| :------------------------ | :------: | :------: | :----: | :----: | :----: |
-| ResNet-18                 |  78.90   |  78.21   | 78.60  | 78.02  | 74.97  |
-| ResNet-18 (L1 on all BNs) |  78.90   |  78.51   | 79.07  | 77.58  | 75.30  |
-| VGG-11                    |  71.04   |  70.66   | 71.69  | 69.16  | 58.95  |
-| simplified VGG-11         |  71.72   |  71.62   | 71.55  | 68.80  |   F    |
-| DenseNet-63               |  78.34   |  78.06   | 78.11  | 77.76  | 76.33  |
+|                           | Original | L1 on BN | PR=0.3 | PR=0.5 | PR=0.7 | PR=0.3 (TFS) | PR=0.5 (TFS) | PR=0.7 (TFS) |
+| :------------------------ | :------: | :------: | :----: | :----: | :----: | :----------: | :----------: | :----------: |
+| ResNet-18                 |  78.90   |  78.21   | 78.60  | 78.02  | 74.97  |    78.31     |    76.84     |    73.93     |
+| ResNet-18 (L1 on all BNs) |  78.90   |  78.51   | 79.07  | 77.58  | 75.30  |    78.29     |    76.77     |    74.26     |
+| VGG-11                    |  71.04   |  70.66   | 71.69  | 69.16  | 58.95  |    70.74     |    68.50     |    61.13     |
+| simplified VGG-11         |  71.72   |  71.62   | 71.55  | 68.80  |   F    |    70.58     |    67.37     |    52.87     |
+| DenseNet-63               |  78.34   |  78.06   | 78.11  | 77.76  | 76.33  |    78.12     |    77.65     |    76.01     |
 
 ### Params (M)
 
@@ -52,16 +52,16 @@ It is supposed to support user defined models with Convolution(groups=1)/Linear 
 | simplified VGG-11         |   0.16   |  0.06  |  0.03  |  0.01  |
 | DenseNet-63               |   0.30   |  0.18  |  0.12  |  0.07  |
 
-<font size=2> \* **F**: Failed to converge </font>
+<font size=2> \* **F**: Failed to converge </font>
 
-<font size=2> \* **PR**: Prune Ratio </font>
+<font size=2> \* **PR**: Prune Ratio </font>
 
-<font size=2>\* **TFS**: Train-from-scratch as proposed in Liu's later paper on ICLR 2019 [**Rethinking the Value of Network Pruning**](https://openreview.net/forum?id=rJlnB3C5Ym). </font>
+<font size=2>\* **TFS**: Train-from-scratch as proposed in Liu's later paper on ICLR 2019 [**Rethinking the Value of Network Pruning**](https://openreview.net/forum?id=rJlnB3C5Ym). </font>
 
 ## Requirements
 
 Python >= 3.6  
-torch >= 1.0.0  
+torch >= 1.1.0  
 torchvision >= 0.3.0  
 
 ## Usage
@@ -93,7 +93,7 @@ torchvision >= 0.3.0
    ...
       ```
 
-   <font size=2> \* ***update_bn*** puts L1 regularization on all BNs. Sparsity on prunable BNs only is also supported for networks with complex connections, such as ResNet. Check examples for more details. </font>
+   <font size=2> \* ***update_bn*** puts L1 regularization on all BNs. Sparsity on prunable BNs only is also supported for networks with complex connections, such as ResNet. Check examples for more details. </font>
 
 3. Prune the model after training
 
@@ -136,15 +136,22 @@ sh experiment-vgg11s.sh % simplified VGG-11 by replacing classifier with a Linea
 sh experiment-densenet.sh
    ```
 
+### Train from scratch
+
+Run shell scripts end with "_tfs". For example, train pruned ResNet-18 after running L1 regularized training:
+
+```shell
+sh experiment_resnet_tfs.sh
+```
+
 ### Load & test pruned model (ResNet-18 example)
 
    ```shell
 python test.py --arch resnet18 --resume_path output-resnet18-bn-pr05/ckpt_best.pth
    ```
 
-<font size=2> ***-all-bn*** refers to L1 sparsity on all BN layers </font>
+<font size=2> ***-all-bn*** refers to L1 sparsity on all BN layers </font>
 
 ## Acknowledgement
 
 The implementation of ***udpate_bn*** is referred to [pytorch-slimming](https://github.com/foolwood/pytorch-slimming).
-
