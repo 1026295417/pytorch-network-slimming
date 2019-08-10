@@ -61,8 +61,6 @@ if __name__ == "__main__":
                         help='train from scratch')
     parser.add_argument('--experimental', action='store_true', default=False,
                         help='Normalize scaling factor per layer for pruning')
-    parser.add_argument('--load-pruned-weight', action='store_true', default=False,
-                        help='Load pruned weight and train')
     args = parser.parse_args()
     args.cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -105,15 +103,17 @@ if __name__ == "__main__":
 
     model = model.to(device)
 
-    if args.prune_ratio > 0 and args.resume_path:
-        if args.load_pruned_weight:
-            model = load_pruned_model(model, torch.load(args.resume_path))
-        else:
+    if args.resume_path:
+        try:
             model.load_state_dict(torch.load(args.resume_path))
-        if args.experimental:
-            model = prune(model, (3, 32, 32), args.prune_ratio, prune_method=liu2017_normalized_by_layer)
-        else:
-            model = prune(model, (3, 32, 32), args.prune_ratio)
+        except:
+            print("Failed to load state_dict directly, trying to load pruned weight ...")
+            model = load_pruned_model(model, torch.load(args.resume_path))
+        if args.prune_ratio > 0:
+            if args.experimental:
+                model = prune(model, (3, 32, 32), args.prune_ratio, prune_method=liu2017_normalized_by_layer)
+            else:
+                model = prune(model, (3, 32, 32), args.prune_ratio)
         if args.tfs:
             for m in model.modules():
                 if isinstance(m, nn.Conv2d):
