@@ -57,6 +57,10 @@ common_layer_pattern = re.compile(
 tensor_op_pattern = re.compile(r".*= (aten::\w+)\(.*, scope: .+")
 
 
+def get_node_str(node):
+    return repr(node).split(" # ")[0]
+
+
 def parse_module_name(x):
     scope_found = scope_pattern.findall(x)
     module_name = ''
@@ -90,7 +94,7 @@ def get_norm_layer_io(graph):
     out2nl = {}
     in2nl = {}
     for node in graph.nodes():
-        node_str = repr(node)
+        node_str = get_node_str(node)
         if norm_layer_pattern.match(node_str):
             bn_name = parse_module_name(node_str)
             output = parse_output_name(node_str)
@@ -108,7 +112,7 @@ def reverse_search_dict(val, target_dict):
 def get_input_count(graph):
     input_count = {}
     for node in graph.nodes():
-        node_str = repr(node)
+        node_str = get_node_str(node)
         matches = common_layer_pattern.findall(node_str)
         if matches:
             input_names = parse_input_names(node_str)
@@ -148,7 +152,7 @@ def get_pruning_layers(model, input_shape):
     while new_outputs:
         temp_outputs = new_outputs[:]
         for node in graph.nodes():
-            node_str = repr(node)
+            node_str = get_node_str(node)
             # found new outputs
             matches = pass_layer_pattern.findall(node_str)
             if matches:
@@ -175,7 +179,7 @@ def get_pruning_layers(model, input_shape):
     while new_inputs:
         temp_inputs = new_inputs[:]
         for node in graph.nodes():
-            node_str = repr(node)
+            node_str = get_node_str(node)
             # found new inputs
             matches = pass_layer_pattern.findall(node_str)
             if matches:
@@ -203,7 +207,7 @@ def get_pruning_layers(model, input_shape):
     prec_layers = {}    # preceding layers
     risky_layer_names = []
     for node in graph.nodes():
-        node_str = repr(node)
+        node_str = get_node_str(node)
         if tensor_op_pattern.match(node_str):
             input_names = parse_input_names(node_str)
             output_name = parse_output_name(node_str)
