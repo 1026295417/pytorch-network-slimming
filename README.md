@@ -1,10 +1,10 @@
 # PyTorch Network Slimming
 
-This repo implements the following paper in [PyTorch](https://pytorch.org): 
+This repo implements the following paper in [PyTorch](https://pytorch.org):  
 
 [**Learning Efficient Convolutional Networks Through Network Slimming**](http://openaccess.thecvf.com/content_iccv_2017/html/Liu_Learning_Efficient_Convolutional_ICCV_2017_paper.html)
 
-Different with most other popular network slimming repos, this implementation enables training & pruning models in hand with a few lines of new codes. Writing codes specifically for pruning is not required. 
+Different with most other popular network slimming repos, this implementation enables training & pruning models in hand with a few lines of new codes. Writing codes specifically for pruning is not required. Moreover, the pruned model can be further improved and deployed with toolkits supporting ONNX. An example of further acceleration with OpenVINO is included.
 
 BN layers are automatically identified by 1) parse the traced graph by [TorchScript](https://pytorch.org/docs/stable/jit.html), and 2) identify **prunable BN layers** which only have Convolution(groups=1)/Linear in preceding & succeeding layers. Example of a **prunable BN**:
 
@@ -151,6 +151,44 @@ python test.py --arch resnet18 --resume_path output-resnet18-bn-pr05/ckpt_best.p
    ```
 
 <font size=2> ***-all-bn*** refers to L1 sparsity on all BN layers </font>
+
+## Inference with [OpenVINO](https://software.intel.com/en-us/openvino-toolkit)
+
+The efficiency of pruned model can be further improved by using OpenVINO, if you are working with Intel processors/accelerators.  
+
+1. Download OpenVINO from the official website [OpenVINO](https://software.intel.com/en-us/openvino-toolkit).
+
+2. After installation, initialize the environment:
+
+   ```shell
+   source /opt/intel/openvino/bin/setupvars.sh
+   ```
+
+3. Take simplified VGG-11 as an example, after finished running *experiment-vgg11s.sh*, convert pruned model to OpenVINO IR:
+
+   ```shell
+   python export2openvino.py --arch vgg11s --weights output-vgg11s-bn-pr05/ckpt_best.pth --outname vgg11s-pr05
+   python export2openvino.py --arch vgg11s --weights output-vgg11s-bn-pr05/ckpt_best.pth --outname vgg11s-pr05 --fp16
+   ```
+
+4. Test with CIFAR-100
+
+   ```shell
+   python test-openvino.py vgg11s-FP32
+   python test-openvino.py vgg11s-FP16
+   ```
+
+5. Compare runtime
+
+   ```shell
+   python cpu-runtime-benchmark-vgg11s.py 
+   ```
+
+On a desktop with Xeon 8160 CPU, the FPS results are:
+
+| PyTorch Full Model | PyTorch PR=0.5 | OpenVINO PR=0.5 FP32 | OpenVINO PR=0.5 FP16 |
+| :----------------: | :------------: | :------------------: | :------------------: |
+|       89.50        |     146.21     |        960.49        |        973.29        |
 
 ## Acknowledgement
 
